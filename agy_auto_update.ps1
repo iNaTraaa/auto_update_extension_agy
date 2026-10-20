@@ -40,7 +40,10 @@ try {
         $tmp = $exe + '.download'
         $backup = $exe + '.backup'
 
-        Invoke-WebRequest -UseBasicParsing -Uri $m.url -OutFile $tmp -TimeoutSec 300
+        curl.exe -L --fail --progress-bar -o $tmp $m.url
+        if ($LASTEXITCODE -ne 0) {
+            throw "Download failed (curl exit code: $LASTEXITCODE)"
+        }
 
         Write-Host 'Verify SHA512...'
 
